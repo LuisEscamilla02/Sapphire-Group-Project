@@ -3,8 +3,6 @@ import pandas as pd
 import numpy as np
 import time
 
-
-
 st.markdown("# Main page 🎈")
 st.sidebar.markdown("# Main page 🎈")
 
