@@ -5,4 +5,4 @@ This project is a resource page used in Sapphire Group's AI4SG class final proje
 ```bash
 git clone https://github.com/HamzaKelani/Sapphire-Group-Project.git
 ```
-Contributors: Hamza Kelani, Rahul, Mohammed, Zein, Luis
+Contributors: Hamza Kelani, Rahul Sharma, Mohammad Nazary, Zeynelabidin Zeynelabidin, Luis Escamilla
