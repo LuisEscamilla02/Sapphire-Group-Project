@@ -1,8 +1,12 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import time
+import openai
 
+# Set up OpenAI API key
+openai.api_key = 'APIkey'
+
+# Header and Sidebar
 st.markdown("# Prototype V1")
 st.sidebar.markdown("# Prototype V1")
 
@@ -10,28 +14,41 @@ message = "This page provides our first example for Prototype #1!\n"
 message += "Please let us know how we can improve this going forward. Thank you!"
 st.write(message)
 
-st.subheader('Functional Feature #1: Citizen Reporting System!', divider='grey')
-df = pd.DataFrame(
-    np.random.randn(0, 2) / [50, 50] + [37.33, -121.88],
-    columns=['lat', 'lon'])
-n = 0
-if prompt:= st.text_input("What is the address of the location where you have located the trash?"):
-    st.write(f"A User has reported trash at the address: {prompt}")
-    n += 1
-    df = pd.DataFrame(
-    np.random.randn(n, 2) / [50, 50] + [37.33, -121.88],
-    columns=['lat', 'lon'])
-    st.balloons()
-st.map(df)
+# Functional Feature #1: Chatbot (ChatGPT-style UI)
+st.subheader('Functional Feature #1: Chatbot!', divider='grey')
 
+# Function to get chatbot response from OpenAI
+def get_chatbot_response(user_input):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": user_input}
+        ]
+    )
+    return response['choices'][0]['message']['content']
 
-st.subheader('Functional Feature #2: Live-feed Cameras With Sensor Technology!', divider='grey')
-VIDEO_URL = "https://www.youtube.com/watch?v=N1qrW_7GDpc"
-st.video(VIDEO_URL)
+# Initialize conversation history
+if 'messages' not in st.session_state:
+    st.session_state['messages'] = []
 
-st.subheader('Functional Feature #3: View All Currently Reported Locations!', divider='grey')
-df = pd.DataFrame(
-    np.random.randn(50, 2) / [50, 50] + [37.33, -121.88],
-    columns=['lat', 'lon'])
-st.map(df)
+# ChatGPT-like chat interface
+user_input = st.chat_input("Ask the assistant anything about grant administration:")
+if user_input:
+    # Add user message to the chat history
+    st.session_state['messages'].append({"role": "user", "content": user_input})
+    
+    # Get response from chatbot
+    response = get_chatbot_response(user_input)
+    
+    # Add assistant's response to the chat history
+    st.session_state['messages'].append({"role": "assistant", "content": response})
 
+# Display chat history in a ChatGPT-like UI
+for message in st.session_state['messages']:
+    if message['role'] == "user":
+        with st.chat_message("user"):
+            st.write(message['content'])
+    else:
+        with st.chat_message("assistant"):
+            st.write(message['content'])
